@@ -10,3 +10,5 @@ Makefile
 cmake_install.cmake
 segment/
 segment.dylib
+segment.so
+.DS_Store

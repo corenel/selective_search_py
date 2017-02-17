@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_MACOSX_RPATH 1)
 
 project(selective_search)
 
@@ -14,4 +15,4 @@ set(CMAKE_SHARED_LINKER_FLAGS "${PYTHON_LDFLAGS} -shared -fPIC")
 
 add_library(segment SHARED segment_py.cpp)
 target_link_libraries(segment ${BOOST_LIBS} segment)
-set_target_properties(segment PROPERTIES PREFIX "")
+set_target_properties(segment PROPERTIES PREFIX "" SUFFIX ".so")

@@ -7,6 +7,7 @@ import nose.tools
 import numpy
 import selective_search
 
+
 class TestCalcAdjecencyMatrix:
     def setup_method(self, method):
         self.label = numpy.zeros((4, 4), dtype=int)
@@ -28,7 +29,7 @@ class TestCalcAdjecencyMatrix:
         # 1, 1, 0, 0
         # 1, 1, 0, 0
         self.label[:2, :] = 1
-        expected_mat = numpy.array([[True, True],\
+        expected_mat = numpy.array([[True, True],
                                     [True, True]])
 
         (adj_mat, adj_dic) = selective_search._calc_adjacency_matrix(self.label, 2)
@@ -46,9 +47,9 @@ class TestCalcAdjecencyMatrix:
         self.label[:2, 2:] = 1
         self.label[2:, :2] = 2
         self.label[2:, 2:] = 3
-        expected_mat = numpy.array([[True, True, True, False],\
-                                    [True, True, False, True],\
-                                    [True, False, True, True],\
+        expected_mat = numpy.array([[True, True, True, False],
+                                    [True, True, False, True],
+                                    [True, False, True, True],
                                     [False, True, True, True]])
 
         (adj_mat, adj_dic) = selective_search._calc_adjacency_matrix(self.label, 4)
@@ -68,8 +69,8 @@ class TestCalcAdjecencyMatrix:
         # 0, 0, 0, 2
         self.label[:2, -1:] = 1
         self.label[2:, -1:] = 2
-        expected_mat = numpy.array([[True, True, True],\
-                                    [True, True, True],\
+        expected_mat = numpy.array([[True, True, True],
+                                    [True, True, True],
                                     [True, True, True]])
 
         (adj_mat, adj_dic) = selective_search._calc_adjacency_matrix(self.label, 3)
@@ -85,8 +86,8 @@ class TestCalcAdjecencyMatrix:
         # 1, 1, 2, 2
         self.label[-1:, :2] = 1
         self.label[-1:, 2:] = 2
-        expected_mat = numpy.array([[True, True, True],\
-                                    [True, True, True],\
+        expected_mat = numpy.array([[True, True, True],
+                                    [True, True, True],
                                     [True, True, True]])
 
         (adj_mat, adj_dic) = selective_search._calc_adjacency_matrix(self.label, 3)
@@ -99,24 +100,24 @@ class TestCalcAdjecencyMatrix:
         # 0, 1, 2, 3
         # 4, 5, 6, 7
         # 8, 9,10,11
-        #12,13,14,15
-        self.label = numpy.array(range(16)).reshape((4,4))
+        # 12,13,14,15
+        self.label = numpy.array(range(16)).reshape((4, 4))
         (adj_mat, adj_dic) = selective_search._calc_adjacency_matrix(self.label, 16)
         assert numpy.array_equal(adj_mat.transpose(), adj_mat)
-        assert set(numpy.flatnonzero(adj_mat[ 0])) == { 0,  1,  4}
-        assert set(numpy.flatnonzero(adj_mat[ 1])) == { 0,  1,  2,  5}
-        assert set(numpy.flatnonzero(adj_mat[ 2])) == { 1,  2,  3,  6}
-        assert set(numpy.flatnonzero(adj_mat[ 3])) == { 2,  3,  7} 
-        assert set(numpy.flatnonzero(adj_mat[ 4])) == { 0,  4,  5,  8}
-        assert set(numpy.flatnonzero(adj_mat[ 5])) == { 1,  4,  5,  6,  9}
-        assert set(numpy.flatnonzero(adj_mat[ 6])) == { 2,  5,  6,  7, 10}
-        assert set(numpy.flatnonzero(adj_mat[ 7])) == { 3,  6,  7, 11}
-        assert set(numpy.flatnonzero(adj_mat[ 8])) == { 4,  8,  9, 12}
-        assert set(numpy.flatnonzero(adj_mat[ 9])) == { 5,  8,  9, 10, 13}
-        assert set(numpy.flatnonzero(adj_mat[10])) == { 6,  9, 10, 11, 14}
-        assert set(numpy.flatnonzero(adj_mat[11])) == { 7, 10, 11, 15} 
-        assert set(numpy.flatnonzero(adj_mat[12])) == { 8, 12, 13}
-        assert set(numpy.flatnonzero(adj_mat[13])) == { 9, 12, 13, 14}
+        assert set(numpy.flatnonzero(adj_mat[0])) == {0, 1, 4}
+        assert set(numpy.flatnonzero(adj_mat[1])) == {0, 1, 2, 5}
+        assert set(numpy.flatnonzero(adj_mat[2])) == {1, 2, 3, 6}
+        assert set(numpy.flatnonzero(adj_mat[3])) == {2, 3, 7}
+        assert set(numpy.flatnonzero(adj_mat[4])) == {0, 4, 5, 8}
+        assert set(numpy.flatnonzero(adj_mat[5])) == {1, 4, 5, 6, 9}
+        assert set(numpy.flatnonzero(adj_mat[6])) == {2, 5, 6, 7, 10}
+        assert set(numpy.flatnonzero(adj_mat[7])) == {3, 6, 7, 11}
+        assert set(numpy.flatnonzero(adj_mat[8])) == {4, 8, 9, 12}
+        assert set(numpy.flatnonzero(adj_mat[9])) == {5, 8, 9, 10, 13}
+        assert set(numpy.flatnonzero(adj_mat[10])) == {6, 9, 10, 11, 14}
+        assert set(numpy.flatnonzero(adj_mat[11])) == {7, 10, 11, 15}
+        assert set(numpy.flatnonzero(adj_mat[12])) == {8, 12, 13}
+        assert set(numpy.flatnonzero(adj_mat[13])) == {9, 12, 13, 14}
         assert set(numpy.flatnonzero(adj_mat[14])) == {10, 13, 14, 15}
         assert set(numpy.flatnonzero(adj_mat[15])) == {11, 14, 15}
 
@@ -136,11 +137,11 @@ class TestNewAdjacencyDict:
         #   166664
         #   166664
         #   555555
-        self.A = {0: {1, 2, 3, 4},\
-                  1: {0, 2, 5},\
-                  2: {0, 1, 3, 5},\
-                  3: {0, 2, 4, 5},\
-                  4: {0, 3, 5},\
+        self.A = {0: {1, 2, 3, 4},
+                  1: {0, 2, 5},
+                  2: {0, 1, 3, 5},
+                  3: {0, 2, 4, 5},
+                  4: {0, 3, 5},
                   5: {1, 2, 3, 4}}
 
     def test_exclusiveness(self):
@@ -168,13 +169,13 @@ class TestNewAdjacencyDict:
 
 class TestNewLabel:
     def setup_method(self, method):
-        self.L  = numpy.array([[0, 0, 0, 0, 0, 0],\
-                               [1, 2, 2, 3, 3, 4],\
-                               [1, 2, 2, 3, 3, 4],\
-                               [5, 5, 5, 5, 5, 5]])
-        self.Lk = numpy.array([[0, 0, 0, 0, 0, 0],\
-                               [1, 6, 6, 6, 6, 4],\
-                               [1, 6, 6, 6, 6, 4],\
+        self.L = numpy.array([[0, 0, 0, 0, 0, 0],
+                              [1, 2, 2, 3, 3, 4],
+                              [1, 2, 2, 3, 3, 4],
+                              [5, 5, 5, 5, 5, 5]])
+        self.Lk = numpy.array([[0, 0, 0, 0, 0, 0],
+                               [1, 6, 6, 6, 6, 4],
+                               [1, 6, 6, 6, 6, 4],
                                [5, 5, 5, 5, 5, 5]])
 
     def test_exclusiveness(self):
@@ -201,18 +202,19 @@ class TestBuildInitialSimilaritySet:
     def test_valie(self):
         # each line: sim, i, j (where sim=i+j in this test)
         # commented out lines: i should be smaller than j
-        expected = [(1, (0, 1)),\
-                   #(1, (1, 0)),\
-                    (2, (0, 2)),\
-                   #(2, (2, 0)),\
-                    (4, (1, 3)),\
-                   #(4, (3, 1)),\
-                    (5, (2, 3)),\
-                   #(5, (3, 2))
+        expected = [(1, (0, 1)),
+                    # (1, (1, 0)),
+                    (2, (0, 2)),
+                    # (2, (2, 0)),
+                    (4, (1, 3)),
+                    # (4, (3, 1)),
+                    (5, (2, 3)),
+                    # (5, (3, 2))
                     ]
 
         S = selective_search._build_initial_similarity_set(self.A0, self.feature_extractor)
         assert S == expected
+
 
 class TestMergeSimilaritySet:
     def setup_method(self, method):
@@ -221,23 +223,25 @@ class TestMergeSimilaritySet:
         # (i, j, t) = (2, 3, 4)
 
         # target similarity set (similarity values are all dummy)
-        self.S = [(1, (0, 1)),\
-                  (2, (0, 2)),\
-                  (3, (1, 3)),\
+        self.S = [(1, (0, 1)),
+                  (2, (0, 2)),
+                  (3, (1, 3)),
                   (5, (2, 3))]
 
         # assumption: adjacency dict is already updated
-        self.Ak = {0: {1, 4},\
-                   1: {0, 4},\
+        self.Ak = {0: {1, 4},
+                   1: {0, 4},
                    4: {0, 1}}
 
-        self.extractor = type('Feature', (), {'similarity' : (lambda i, j: i + j)})
+        self.extractor = type('Feature', (),
+                              {'similarity': (lambda i, j: i + j)})
 
     def test_value(self):
-        S_ = selective_search._merge_similarity_set(self.extractor, self.Ak, self.S, 2, 3, 4)
-        expect_S = [(1, (0, 1)),\
-                    (4, (0, 4)),\
+        S_ = selective_search._merge_similarity_set(self.extractor,
+                                                    self.Ak,
+                                                    self.S, 2, 3, 4)
+        expect_S = [(1, (0, 1)),
+                    (4, (0, 4)),
                     (5, (1, 4))]
 
         assert S_ == expect_S
-

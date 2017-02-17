@@ -10,21 +10,22 @@ import scipy.ndimage.filters
 
 SimilarityMask = collections.namedtuple("SimilarityMask", ["size", "color", "texture", "fill"])
 
+
 class Features:
-    def __init__(self, image, label, n_region, similarity_weight = SimilarityMask(1, 1, 1, 1)):
+    def __init__(self, image, label, n_region, similarity_weight=SimilarityMask(1, 1, 1, 1)):
         self.image = image
         self.label = label
-        self.w     = similarity_weight
+        self.w = similarity_weight
 
-        self.imsize  = float(label.shape[0] * label.shape[1])
-        self.size    = self.__init_size(n_region)
-        self.color   = self.__init_color(n_region)
-        self.bbox    = self.__init_bounding_box(n_region)
+        self.imsize = float(label.shape[0] * label.shape[1])
+        self.size = self.__init_size(n_region)
+        self.color = self.__init_color(n_region)
+        self.bbox = self.__init_bounding_box(n_region)
         self.texture = self.__init_texture(n_region)
 
     def __init_size(self, n_region):
-        bincnt = numpy.bincount(self.label.ravel(), minlength = n_region)
-        return {i : bincnt[i] for i in range(n_region)}
+        bincnt = numpy.bincount(self.label.ravel(), minlength=n_region)
+        return {i: bincnt[i] for i in range(n_region)}
 
     def __init_color(self, n_region):
         n_bin = 25
@@ -34,14 +35,20 @@ class Features:
         bins_label = range(n_region + 1)
         bins = [bins_label, bins_color]
 
-        r_hist = numpy.histogram2d(self.label.ravel(), self.image[:, :, 0].ravel(), bins=bins)[0] #shape=(n_region, n_bin)
-        g_hist = numpy.histogram2d(self.label.ravel(), self.image[:, :, 1].ravel(), bins=bins)[0]
-        b_hist = numpy.histogram2d(self.label.ravel(), self.image[:, :, 2].ravel(), bins=bins)[0]
+        r_hist = numpy.histogram2d(self.label.ravel(),
+                                   self.image[:, :, 0].ravel(),
+                                   bins=bins)[0]  # shape=(n_region, n_bin)
+        g_hist = numpy.histogram2d(self.label.ravel(),
+                                   self.image[:, :, 1].ravel(),
+                                   bins=bins)[0]
+        b_hist = numpy.histogram2d(self.label.ravel(),
+                                   self.image[:, :, 2].ravel(),
+                                   bins=bins)[0]
         hist = numpy.hstack([r_hist, g_hist, b_hist])
-        l1_norm = numpy.sum(hist, axis = 1).reshape((n_region, 1))
+        l1_norm = numpy.sum(hist, axis=1).reshape((n_region, 1))
 
         hist = numpy.nan_to_num(hist / l1_norm)
-        return {i : hist[i] for i in range(n_region)}
+        return {i: hist[i] for i in range(n_region)}
 
     def __init_bounding_box(self, n_region):
         bbox = dict()
@@ -52,9 +59,10 @@ class Features:
 
     def __init_texture(self, n_region):
         ar = numpy.ndarray((n_region, 240))
-        return {i : ar[i] for i in range(n_region)}
+        return {i: ar[i] for i in range(n_region)}
 
-    def __calc_gradient_histogram(self, label, gaussian, n_region, nbins_orientation = 8, nbins_inten = 10):
+    def __calc_gradient_histogram(self, label, gaussian, n_region,
+                                  nbins_orientation=8, nbins_inten=10):
         op = numpy.array([[-1, 0, 1]], dtype=numpy.float32)
         h = scipy.ndimage.filters.convolve(gaussian, op)
         v = scipy.ndimage.filters.convolve(gaussian, op.transpose())
@@ -69,23 +77,23 @@ class Features:
 
         # calculate 3 dimensional histogram
         ar = numpy.vstack([label.ravel(), g.ravel(), gaussian.ravel()]).transpose()
-        hist = numpy.histogramdd(ar, bins = bins)[0]
+        hist = numpy.histogramdd(ar, bins=bins)[0]
 
         # orientation_wise intensity histograms are serialized for each region
         return numpy.reshape(hist, (n_region, nbins_orientation * nbins_inten))
 
     def __init_texture(self, n_region):
-        gaussian = skimage.filters.gaussian_filter(self.image, sigma = 1.0, multichannel = True).astype(numpy.float32)
+        gaussian = skimage.filters.gaussian_filter(self.image, sigma=1.0,
+                                                   multichannel=True).astype(numpy.float32)
         r_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 0], n_region)
         g_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 1], n_region)
         b_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 2], n_region)
 
         hist = numpy.hstack([r_hist, g_hist, b_hist])
-        l1_norm = numpy.sum(hist, axis = 1).reshape((n_region, 1))
+        l1_norm = numpy.sum(hist, axis=1).reshape((n_region, 1))
 
         hist = numpy.nan_to_num(hist / l1_norm)
-        return {i : hist[i] for i in range(n_region)}
-
+        return {i: hist[i] for i in range(n_region)}
 
     def __sim_size(self, i, j):
         return 1. - (self.size[i] + self.size[j]) / self.imsize
@@ -107,10 +115,9 @@ class Features:
 
     def similarity(self, i, j):
         return self.w.size * self.__sim_size(i, j) + \
-               self.w.texture * self.__sim_texture(i, j) + \
-               self.w.color * self.__sim_color(i, j) + \
-               self.w.fill * self.__sim_fill(i, j)
-
+            self.w.texture * self.__sim_texture(i, j) + \
+            self.w.color * self.__sim_color(i, j) + \
+            self.w.fill * self.__sim_fill(i, j)
 
     def __merge_size(self, i, j, new_region_id):
         self.size[new_region_id] = self.size[i] + self.size[j]
@@ -119,14 +126,23 @@ class Features:
         return (w1 * vec1 + w2 * vec2) / (w1 + w2)
 
     def __merge_color(self, i, j, new_region_id):
-        self.color[new_region_id] = self.__histogram_merge(self.color[i], self.color[j], self.size[i], self.size[j])
+        self.color[new_region_id] = self.__histogram_merge(self.color[i],
+                                                           self.color[j],
+                                                           self.size[i],
+                                                           self.size[j])
 
     def __merge_texture(self, i, j, new_region_id):
-        self.texture[new_region_id] = self.__histogram_merge(self.texture[i], self.texture[j], self.size[i], self.size[j])
+        self.texture[new_region_id] = self.__histogram_merge(self.texture[i],
+                                                             self.texture[j],
+                                                             self.size[i],
+                                                             self.size[j])
 
     def __merge_bbox(self, i, j, new_region_id):
         (bi0, bi1, bi2, bi3), (bj0, bj1, bj2, bj3) = self.bbox[i], self.bbox[j]
-        self.bbox[new_region_id] = (min(bi0, bj0), min(bi1, bj1), max(bi2, bj2), max(bi3, bj3))
+        self.bbox[new_region_id] = (min(bi0, bj0),
+                                    min(bi1, bj1),
+                                    max(bi2, bj2),
+                                    max(bi3, bj3))
 
     def merge(self, i, j):
         new_region_id = len(self.size)
@@ -135,4 +151,3 @@ class Features:
         self.__merge_texture(i, j, new_region_id)
         self.__merge_bbox(i, j, new_region_id)
         return new_region_id
-

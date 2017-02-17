@@ -14,13 +14,14 @@ import selective_search
 from PySide.QtCore import *
 from PySide.QtGui import *
 
-#color_choises = ["RGB", "Lab", "rgI", "HSV", "nRGB", "Hue"]
+# color_choises = ["RGB", "Lab", "rgI", "HSV", "nRGB", "Hue"]
 color_choises = ["RGB", "rgI", "HSV", "nRGB", "Hue"]
 k_choises = ["50", "100", "150", "300"]
-similarity_choises = ["C", "T", "S", "F",\
-                      "C+T", "C+S", "C+F", "T+S", "T+F", "S+F",\
-                      "C+T+S", "C+T+F", "C+S+F", "T+S+F",\
+similarity_choises = ["C", "T", "S", "F",
+                      "C+T", "C+S", "C+F", "T+S", "T+F", "S+F",
+                      "C+T+S", "C+T+F", "C+S+F", "T+S+F",
                       "C+T+S+F"]
+
 
 class Demo(QWidget):
     chosen_colors = {"RGB"}
@@ -104,7 +105,6 @@ class Demo(QWidget):
 
         self.layout.addLayout(hbox, 1, 2)
 
-
     def count_changed(self, value):
         self.__draw()
         self.count_label.setText(str(value))
@@ -157,7 +157,7 @@ class Demo(QWidget):
         self.label.setPixmap(self.pixmap)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--image', type=str, required=True, help='filename of the image')
     args = parser.parse_args()
@@ -170,4 +170,3 @@ if __name__=="__main__":
     wnd = Demo(img)
     wnd.show()
     app.exec_()
-

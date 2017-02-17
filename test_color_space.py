@@ -5,6 +5,7 @@ import pytest
 import numpy
 from color_space import *
 
+
 class TestColorSpace:
     def _assert_range(self, img):
         assert img.dtype == numpy.uint8
@@ -19,22 +20,19 @@ class TestColorSpace:
         self.I[:, :, 2] = 150
         self.Irand = numpy.random.randint(0, 256, (10, 10, 3)).astype(numpy.uint8)
 
-
     def test_to_grey_range(self):
         self._assert_range(to_grey(self.Irand))
-        
+
     def test_to_grey_value(self):
         img = to_grey(self.I)
         grey_value = int(0.2125 * 50 + 0.7154 * 100 + 0.0721 * 150)
         assert ((img == grey_value).all())
 
-
     def test_to_Lab_range(self):
-        self._assert_range(to_Lab(self.Irand)) 
+        self._assert_range(to_Lab(self.Irand))
 
     def test_to_Lab_value(self):
         img = to_Lab(self.I)
-
 
     def test_to_rgI_range(self):
         self._assert_range(to_rgI(self.Irand))
@@ -46,7 +44,6 @@ class TestColorSpace:
         assert ((img[:, :, 1] == 100).all())
         assert ((img[:, :, 2] == grey_value).all())
 
-
     def test_to_HSV_range(self):
         self._assert_range(to_HSV(self.Irand))
 
@@ -56,7 +53,6 @@ class TestColorSpace:
         assert ((img[:, :, 0] == h).all())
         assert ((img[:, :, 1] == s).all())
         assert ((img[:, :, 2] == v).all())
-
 
     def test_to_nRGB_range(self):
         self._assert_range(to_nRGB(self.Irand))
@@ -69,7 +65,6 @@ class TestColorSpace:
         assert ((img[:, :, 1] == int(g)).all())
         assert ((img[:, :, 2] == int(b)).all())
 
-
     def test_to_Hue_range(self):
         self._assert_range(to_Hue(self.Irand))
 
@@ -79,7 +74,6 @@ class TestColorSpace:
         assert ((img[:, :, 0] == expected_h).all())
         assert ((img[:, :, 1] == expected_h).all())
         assert ((img[:, :, 2] == expected_h).all())
-
 
     def test_convert_color_nonexisting_color(self):
         with pytest.raises(KeyError):
@@ -96,4 +90,3 @@ class TestColorSpace:
         assert numpy.array_equal(convert_color(self.Irand, 'hsv'), to_HSV(self.Irand))
         assert numpy.array_equal(convert_color(self.Irand, 'nrgb'), to_nRGB(self.Irand))
         assert numpy.array_equal(convert_color(self.Irand, 'hue'), to_Hue(self.Irand))
-
