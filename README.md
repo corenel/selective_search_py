@@ -29,6 +29,22 @@ This implementation is based on the journal edition of the original paper, and g
 
 In addition, this is only tested on x64 Linux environment.
 
+> For macOS:
+>
+> ```bash
+> # install cmake
+> $ brew install cmake
+> # install boost
+> $ brew install boost --with-python
+> $ brew install boost-python
+> # install boost.NumPy
+> $ git clone https://github.com/ndarray/Boost.NumPy.git
+> $ cd Boost.NumPy
+> $ mkdir build
+> $ cd build
+> $ cmake .. -DCMAKE_INSTALL_NAME_DIR=/usr/local/lib -DLIB_SUFFIX=
+> $ make install
+> ```
 
 # Preparation
 
