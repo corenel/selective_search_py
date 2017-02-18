@@ -83,8 +83,8 @@ class Features:
         return numpy.reshape(hist, (n_region, nbins_orientation * nbins_inten))
 
     def __init_texture(self, n_region):
-        gaussian = skimage.filters.gaussian_filter(self.image, sigma=1.0,
-                                                   multichannel=True).astype(numpy.float32)
+        gaussian = skimage.filters.gaussian(self.image, sigma=1.0,
+                                            multichannel=True).astype(numpy.float32)
         r_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 0], n_region)
         g_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 1], n_region)
         b_hist = self.__calc_gradient_histogram(self.label, gaussian[:, :, 2], n_region)
