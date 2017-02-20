@@ -44,8 +44,9 @@ def to_HSV(I):
 
 
 def to_nRGB(I):
+    real_min = 2.2251e-308
     _I = I / 255.0
-    norm_I = numpy.sqrt(_I[:, :, 0] ** 2 + _I[:, :, 1] ** 2 + _I[:, :, 2] ** 2)
+    norm_I = numpy.sqrt(_I[:, :, 0] ** 2 + _I[:, :, 1] ** 2 + _I[:, :, 2] ** 2) + real_min
     norm_r = (_I[:, :, 0] / norm_I * 255).astype(numpy.uint8)
     norm_g = (_I[:, :, 1] / norm_I * 255).astype(numpy.uint8)
     norm_b = (_I[:, :, 2] / norm_I * 255).astype(numpy.uint8)
