@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import collections
+import sys
 import math
 import numpy
 import skimage
@@ -47,7 +48,7 @@ class Features:
         hist = numpy.hstack([r_hist, g_hist, b_hist])
         l1_norm = numpy.sum(hist, axis=1).reshape((n_region, 1))
 
-        with np.errstate(divide='ignore', invalid='ignore'):
+        with numpy.errstate(divide='ignore', invalid='ignore'):
             hist = numpy.nan_to_num(hist / l1_norm)
         return {i: hist[i] for i in range(n_region)}
 
@@ -55,7 +56,10 @@ class Features:
         bbox = dict()
         for region in range(n_region):
             I, J = numpy.where(self.label == region)
-            bbox[region] = (min(I), min(J), max(I), max(J))
+            try:
+                bbox[region] = (min(I), min(J), max(I), max(J))
+            except ValueError:
+                bbox[region] = (0, 0, 0, 0)
         return bbox
 
     def __init_texture(self, n_region):
@@ -93,7 +97,8 @@ class Features:
         hist = numpy.hstack([r_hist, g_hist, b_hist])
         l1_norm = numpy.sum(hist, axis=1).reshape((n_region, 1))
 
-        hist = numpy.nan_to_num(hist / l1_norm)
+        with numpy.errstate(divide='ignore', invalid='ignore'):
+            hist = numpy.nan_to_num(hist / l1_norm)
         return {i: hist[i] for i in range(n_region)}
 
     def __sim_size(self, i, j):
