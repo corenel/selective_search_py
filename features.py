@@ -47,7 +47,8 @@ class Features:
         hist = numpy.hstack([r_hist, g_hist, b_hist])
         l1_norm = numpy.sum(hist, axis=1).reshape((n_region, 1))
 
-        hist = numpy.nan_to_num(hist / l1_norm)
+        with np.errstate(divide='ignore', invalid='ignore'):
+            hist = numpy.nan_to_num(hist / l1_norm)
         return {i: hist[i] for i in range(n_region)}
 
     def __init_bounding_box(self, n_region):
