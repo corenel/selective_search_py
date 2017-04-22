@@ -7,11 +7,17 @@ import copy
 import joblib
 import numpy
 import scipy.sparse
-import segment
 import collections
 import skimage.io
-import features
-import color_space
+
+try:
+    import segment
+    import features
+    import color_space
+except:
+    from selective_search_py import segment
+    from selective_search_py import features
+    from selective_search_py import color_space
 
 
 def _calc_adjacency_matrix(label_img, n_region):
