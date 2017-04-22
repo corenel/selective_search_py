@@ -33,8 +33,8 @@ In addition, this is only tested on x64 Linux environment.
 > # install cmake
 > $ brew install cmake
 > # install boost
-> $ brew install boost --with-python
-> $ brew install boost-python --with-python3
+> $ brew install boost
+> $ brew install boost-python --with-python3 --without-python
 > ```
 
 # Preparation
