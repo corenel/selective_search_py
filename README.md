@@ -19,13 +19,11 @@ This implementation is based on the journal edition of the original paper, and g
 
 # Requirements
 
-* CMake (>= 2.8)
+* CMake (>= 3.0)
 * GCC (>= 4.8.2)
 * Python (>= 3.4.3)
     * For required packages, see `requirements.txt`
-* Boost (>= 1.58.0) built with python support
-* [Boost.NumPy](https://github.com/ndarray/Boost.NumPy)
-    * If you got an error to build, see [belltailjp/Boost.NumPy](https://github.com/belltailjp/Boost.NumPy))
+* Boost (>= 1.64.0) built with python3 support
 
 In addition, this is only tested on x64 Linux environment.
 
@@ -36,14 +34,7 @@ In addition, this is only tested on x64 Linux environment.
 > $ brew install cmake
 > # install boost
 > $ brew install boost --with-python
-> $ brew install boost-python
-> # install boost.NumPy
-> $ git clone https://github.com/ndarray/Boost.NumPy.git
-> $ cd Boost.NumPy
-> $ mkdir build
-> $ cd build
-> $ cmake .. -DCMAKE_INSTALL_NAME_DIR=/usr/local/lib -DLIB_SUFFIX=
-> $ make install
+> $ brew install boost-python --with-python3
 > ```
 
 # Preparation
