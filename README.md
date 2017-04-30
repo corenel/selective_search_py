@@ -42,8 +42,11 @@ In addition, this is only tested on x64 Linux environment.
 > # download boost_1_63.zip and unzip
 > # install boost
 > $ cd boost_1_63_0
-> $ sudo ./bootstrap.sh --with-python=python3 --prefix=~/Downloads/
-> $ ./b2
+> $ sudo ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-root=/usr --prefix=~/Downloads/
+> $ ./b2 --with-python --clean
+> $ ./b2 --with-python
+> # expect no PyClass_Type with python3
+> $ nm -D stage/lib/libboost_python-3.so | grep PyClass_Type
 > ```
 
 
