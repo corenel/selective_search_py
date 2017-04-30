@@ -36,6 +36,16 @@ In addition, this is only tested on x64 Linux environment.
 > $ brew install boost
 > $ brew install boost-python --with-python3 --without-python
 > ```
+> For Ubuntu:
+>
+> ```bash
+> # download boost_1_63.zip and unzip
+> # install boost
+> $ cd boost_1_63_0
+> $ sudo ./bootstrap.sh --with-python=python3 --prefix=~/Downloads/
+> $ ./b2
+> ```
+
 
 # Preparation
 
@@ -46,8 +56,14 @@ It works as a python module, so build it first.
 % git clone https://github.com/belltailjp/selective_search_py.git
 % cd selective_search_py
 % wget http://cs.brown.edu/~pff/segment/segment.zip; unzip segment.zip; rm segment.zip
-% export CPLUS_INCLUDE_PATH=/usr/include/python2.7
+% export CPLUS_INCLUDE_PATH=/usr/include/python3.5
 % cmake .
+# custom boost path
+# cmake \
+#    -DBoost_NO_BOOST_CMAKE=TRUE \
+#    -DBoost_NO_SYSTEM_PATHS=TRUE \
+#    -DBOOST_ROOT:PATHNAME=~/Downloads/boost_1_63_0 \
+#    -DBoost_LIBRARY_DIRS:FILEPATH=~/Downloads/boost_1_63_0/stage/libs
 % make
 ```
 
